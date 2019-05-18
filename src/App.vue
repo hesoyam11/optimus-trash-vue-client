@@ -3,16 +3,24 @@
     <div id="nav">
       <router-link to="/">Home</router-link>
       <router-link to="/about">About</router-link>
-      <router-link to="/register" v-if="!isLoggedIn" style="float:right" >Register</router-link>
-      <router-link to="/login" v-if="!isLoggedIn" style="float:right" >Login</router-link>
-      <a v-if="isLoggedIn" @click="logout" style="float:right" to="/login">Logout</a>
+      <router-link to="/register" v-if="!isLoggedIn" style="float:right">{{ $t('register') }}</router-link>
+      <router-link to="/login" v-if="!isLoggedIn" style="float:right" >{{ $t('login') }}</router-link>
+      <a v-if="isLoggedIn" @click="logout" style="float:right">{{ $t('logout') }}</a>
+      <a @click="switchLocale" style="float:right">{{ locale === 'en' ? 'UA' : 'EN' }}</a>
     </div>
     <router-view/>
   </div>
 </template>
 
 <script>
+  import i18n from './i18n.js'
+
   export default {
+    data: function() {
+      return {
+        locale: i18n.locale,
+      }
+    },
     computed: {
       isLoggedIn: function () {
         return this.$store.getters.isLoggedIn;
@@ -24,6 +32,10 @@
           .then(() => {
             this.$router.push('/');
           });
+      },
+      switchLocale: function() {
+        i18n.locale = i18n.locale === 'en' ? 'ua' : 'en';
+        this.locale = i18n.locale;
       }
     },
     created: function() {
@@ -44,6 +56,21 @@
     }
   }
 </script>
+
+<i18n>
+{
+  "en": {
+    "login": "Login",
+    "logout": "Logout",
+    "register": "Register"
+  },
+  "ua": {
+    "login": "Увійти",
+    "logout": "Вийти",
+    "register": "Зареєструватися"
+  }
+}
+</i18n>
 
 <style>
 body {
