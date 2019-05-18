@@ -12,7 +12,8 @@ export default new Vuex.Store({
   },
   getters: {
     isLoggedIn: state => !!state.accessToken,
-    authStatus: state => state.status
+    authStatus: state => state.status,
+    userId: state => state.userId || localStorage.getItem('userId')
   },
   mutations: {
     auth_request(state) {

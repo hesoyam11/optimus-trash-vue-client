@@ -3,12 +3,17 @@
     <div id="nav">
       <router-link to="/">Home</router-link>
       <router-link to="/about">About</router-link>
+      <a @click="switchLocale" style="float:right">{{ locale === 'en' ? 'UA' : 'EN' }}</a>
       <router-link to="/register" v-if="!isLoggedIn" style="float:right">{{ $t('register') }}</router-link>
       <router-link to="/login" v-if="!isLoggedIn" style="float:right" >{{ $t('login') }}</router-link>
       <a v-if="isLoggedIn" @click="logout" style="float:right">{{ $t('logout') }}</a>
-      <a @click="switchLocale" style="float:right">{{ locale === 'en' ? 'UA' : 'EN' }}</a>
+      <router-link :to="userIdLink" v-if="isLoggedIn" style="float: right">
+        {{ $t('myAccount') }}
+      </router-link>
     </div>
-    <router-view/>
+    <div id="content">
+      <router-view/>
+    </div>
   </div>
 </template>
 
@@ -18,12 +23,17 @@
   export default {
     data: function() {
       return {
-        locale: i18n.locale,
+        locale: localStorage.getItem('locale') || 'en',
       }
     },
     computed: {
       isLoggedIn: function () {
         return this.$store.getters.isLoggedIn;
+      },
+      userIdLink: function() {
+        const link = 'users/' + this.$store.getters.userId;
+        console.log(link);
+        return link;
       }
     },
     methods: {
@@ -36,6 +46,7 @@
       switchLocale: function() {
         i18n.locale = i18n.locale === 'en' ? 'ua' : 'en';
         this.locale = i18n.locale;
+        localStorage.setItem('locale', this.locale);
       }
     },
     created: function() {
@@ -62,19 +73,33 @@
   "en": {
     "login": "Login",
     "logout": "Logout",
-    "register": "Register"
+    "register": "Register",
+    "myAccount": "My Account"
   },
   "ua": {
     "login": "Увійти",
     "logout": "Вийти",
-    "register": "Зареєструватися"
+    "register": "Зареєструватися",
+    "myAccount": "Мій Аккаунт"
   }
 }
 </i18n>
 
 <style>
+html {
+  background-color: cadetblue;
+}
+
 body {
   margin: 0;
+}
+
+#content {
+  max-width: 900px;
+  padding: 10px;
+  background-color: white;
+  margin: 0 auto;
+  min-height: 500px;
 }
 
 #app {

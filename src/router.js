@@ -3,6 +3,7 @@ import Router from 'vue-router'
 import Login from './views/Login.vue'
 import Register from './views/Register.vue'
 import Secure from './views/SecuredExample.vue'
+import UserDetail from './views/UserDetail.vue'
 import Home from './views/Home.vue'
 import store from './store.js'
 
@@ -42,6 +43,11 @@ const router = new Router({
       meta: {
         requiresAuth: true
       }
+    },
+    {
+      path: '/users/:id',
+      name: 'userDetail',
+      component: UserDetail
     }
   ]
 });
