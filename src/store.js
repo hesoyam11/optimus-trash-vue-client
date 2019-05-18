@@ -36,7 +36,7 @@ export default new Vuex.Store({
       return new Promise((resolve, reject) => {
         commit('auth_request');
         Axios({
-          url: 'http://localhost:8000/api/token/',
+          url: process.env.VUE_APP_BACKEND_ADDRESS + 'api/token/',
           data: user,
           method: 'POST'
         })
@@ -70,7 +70,7 @@ export default new Vuex.Store({
       commit('auth_request');
       return new Promise((resolve, reject) => {
         Axios({
-          url: 'http://localhost:8000/api/users/',
+          url: process.env.VUE_APP_BACKEND_ADDRESS + 'api/users/',
           data: user,
           method: 'POST'
         })
