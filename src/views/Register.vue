@@ -50,14 +50,18 @@
                     return;
                 }
 
-                let data = {
+                const data = {
                     username: this.username,
                     email: this.email,
                     password: this.password
                 };
 
-                this.$store.dispatch('register', data)
-                    .then(() => this.$router.push('/login'))
+                this.$axios({
+                    url: 'api/users/',
+                    data,
+                    method: 'POST'
+                })
+                    .then(() => this.$router.push({ name: 'login' }))
                     .catch(err => this.errorMessage = err.message);
             }
         }

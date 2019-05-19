@@ -24,10 +24,10 @@
     },
     methods: {
       login: function() {
-        let username = this.username;
-        let password = this.password;
+        const username = this.username;
+        const password = this.password;
         this.$store.dispatch('login', { username, password })
-          .then(() => this.$router.push('/'))
+          .then(() => this.$router.push({ name: 'home' }))
           .catch(err => this.errorMessage = err.message);
       }
     }

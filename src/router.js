@@ -6,6 +6,7 @@ import Secure from './views/SecuredExample.vue'
 import UserDetail from './views/UserDetail.vue'
 import Home from './views/Home.vue'
 import store from './store.js'
+import NotFound404 from "./views/NotFound404";
 
 Vue.use(Router);
 
@@ -41,28 +42,61 @@ const router = new Router({
       name: 'secure',
       component: Secure,
       meta: {
-        requiresAuth: true
+        requiresIsLoggedIn: true
+      }
+    },
+    {
+      path: '/superuser',
+      name: 'superuser',
+      component: Secure,
+      meta: {
+        requiresIsSuperuser: true
+      }
+    },
+    {
+      path: '/confirmed',
+      name: 'confirmed',
+      component: Secure,
+      meta: {
+        requiresIsConfirmed: true
       }
     },
     {
       path: '/users/:id',
       name: 'userDetail',
       component: UserDetail
+    },
+    {
+      path: '*',
+      name: 'notFound404',
+      component: NotFound404
     }
   ]
 });
 
 router.beforeEach((to, from, next) => {
-  if (to.matched.some(record => record.meta.requiresAuth)) {
-    if (store.getters.isLoggedIn) {
-      next();
+  if (to.matched.some(record => record.meta.requiresIsLoggedIn)) {
+    if (!store.getters.isLoggedIn) {
+      next({ name: 'login' });
       return;
     }
-    next('/login');
   }
-  else {
-    next();
+
+  if (to.matched.some(record => record.meta.requiresIsSuperuser)) {
+    if (!store.state.isSuperuser) {
+      next({ name: 'login' });
+      return;
+    }
   }
+
+  if (to.matched.some(record => record.meta.requiresIsConfirmed)) {
+    if (!store.state.isConfirmed) {
+      next({ name: 'login' });
+      return;
+    }
+  }
+
+  next();
 });
 
 export default router;

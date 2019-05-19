@@ -1,96 +1,97 @@
-import Axios from 'axios'
+import axios from './axios-instance'
 import Vue from 'vue'
 import Vuex from 'vuex'
+import createPersistedState from 'vuex-persistedstate'
 
 Vue.use(Vuex);
 
 export default new Vuex.Store({
-  state: {
-    status: '',
-    accessToken: localStorage.getItem('accessToken') || '',
-    userId: localStorage.getItem('userId') || ''
-  },
-  getters: {
-    isLoggedIn: state => !!state.accessToken,
-    authStatus: state => state.status,
-    userId: state => state.userId || localStorage.getItem('userId')
-  },
-  mutations: {
-    auth_request(state) {
-      state.status = 'loading';
+    state: {
+        accessToken: '',
+        userId: 0,
+        isSuperuser: false,
+        isConfirmed: false,
+
+        locale: 'en',
     },
-    auth_success(state, accessToken, userId) {
-      state.status = 'success';
-      state.accessToken = accessToken;
-      state.userId = userId;
+
+    // automatically saves `state` in `localStorage`!
+    plugins: [createPersistedState()],
+
+    getters: {
+        isLoggedIn: state => !!state.accessToken
     },
-    auth_error(state) {
-      state.status = 'error';
+
+    mutations: {
+        LOGIN_SUCCESS(state, payload) {
+            state.accessToken = payload.accessToken;
+            state.userId = payload.userId;
+            state.isSuperuser = payload.isSuperuser;
+            state.isConfirmed = payload.isConfirmed;
+        },
+
+        LOGIN_FAILURE(state) {
+            state.accessToken = '';
+        },
+
+        LOGOUT(state) {
+            state.accessToken = '';
+        },
+
+        SET_LOCALE(state, locale) {
+            state.locale = locale;
+        }
     },
-    logout(state) {
-      state.status = '';
-      state.accessToken = '';
+
+    actions: {
+
+        login({commit}, {username, password}) {
+            return new Promise((resolve, reject) => {
+                axios({
+                    url: 'api/token/',
+                    data: {
+                        username,
+                        password
+                    },
+                    method: 'POST'
+                })
+                    .then(response => {
+                        const accessToken = response.data["access"];
+
+                        // retrieving `user_id` from the payload of a JWT
+                        const base64Url = accessToken.split('.')[1];
+                        const base64 = base64Url.replace('-', '+')
+                            .replace('_', '/');
+                        const payloadObject = JSON.parse(atob(base64));
+                        const userId = payloadObject["user_id"];
+
+                        // fetching the additional user's account information
+                        axios({
+                            url: 'api/users/' + userId,
+                            method: 'GET'
+                        })
+                            .then(response => {
+                                const user = response.data;
+                                commit('LOGIN_SUCCESS', {...user, userId, accessToken});
+                                axios.defaults.headers.common['Authorization'] =
+                                    'Bearer ' + accessToken;
+                                resolve();
+                            })
+                            .catch(err => {
+                                commit('LOGIN_FAILURE');
+                                reject(err);
+                            });
+                    })
+                    .catch(err => {
+                        commit('LOGIN_FAILURE');
+                        reject(err);
+                    });
+            });
+        },
+
+        logout({commit}) {
+            commit('LOGOUT');
+            delete axios.defaults.headers.common['Authorization'];
+        }
     }
-  },
-  actions: {
-    login({commit}, user) {
-      return new Promise((resolve, reject) => {
-        commit('auth_request');
-        Axios({
-          url: process.env.VUE_APP_BACKEND_ADDRESS + 'api/token/',
-          data: user,
-          method: 'POST'
-        })
-          .then(response => {
-            const accessToken = response.data["access"];
-
-            // retrieving `user_id` from the payload of a JWT
-            let base64Url = accessToken.split('.')[1];
-            let base64 = base64Url.replace('-', '+')
-                .replace('_', '/');
-            let payloadObject = JSON.parse(atob(base64));
-            const userId = payloadObject["user_id"];
-
-            localStorage.setItem('accessToken', accessToken);
-            localStorage.setItem('userId', userId);
-
-            Axios.defaults.headers.common['Authorization'] =
-                'Bearer ' + accessToken;
-
-            commit('auth_success', accessToken, userId);
-            resolve(response);
-          })
-          .catch(err => {
-            commit('auth_error');
-            localStorage.removeItem('accessToken');
-            reject(err);
-          });
-      })
-    },
-    register({commit}, user) {
-      commit('auth_request');
-      return new Promise((resolve, reject) => {
-        Axios({
-          url: process.env.VUE_APP_BACKEND_ADDRESS + 'api/users/',
-          data: user,
-          method: 'POST'
-        })
-          .then(response => {
-            commit('auth_error');
-            resolve(response);
-          })
-          .catch(err => {
-            reject(err);
-          });
-      });
-    },
-    logout({commit}) {
-      return new Promise((resolve) => {
-        commit('logout');
-        localStorage.removeItem('accessToken');
-        delete Axios.defaults.headers.common['Authorization'];
-        resolve();
-      })
-    }
-  }
 })

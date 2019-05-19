@@ -1,4 +1,4 @@
-import Axios from 'axios';
+import axios from './axios-instance'
 import Vue from 'vue'
 import App from './App.vue'
 import router from './router'
@@ -7,19 +7,13 @@ import i18n from './i18n'
 
 Vue.config.productionTip = false;
 
-// Now we can use `this.$http` inside any component.
-Vue.prototype.$http = Axios;
+Vue.prototype.$axios = axios;
 
-const accessToken = localStorage.getItem('accessToken');
-
-if (accessToken) {
-  Vue.prototype.$http.defaults.headers.common['Authorization'] =
-      'Bearer ' + accessToken;
-}
+i18n.locale = store.state.locale;
 
 new Vue({
-  router,
-  store,
-  i18n,
-  render: h => h(App)
+    router,
+    store,
+    i18n,
+    render: h => h(App)
 }).$mount('#app');
