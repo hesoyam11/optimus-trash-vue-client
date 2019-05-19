@@ -13,6 +13,7 @@
                 </span>
 
                 <span v-if="isLoggedIn">
+                    <router-link :to="{ name: 'buildPath' }">{{ $t('buildPath') }}</router-link>
                     <router-link :to="userPageRoute">{{ $t('myAccount') }}</router-link>
                     <a @click="logout">{{ $t('logout') }}</a>
                 </span>
@@ -83,13 +84,15 @@
         "login": "Login",
         "logout": "Logout",
         "register": "Register",
-        "myAccount": "My Account"
+        "myAccount": "My Account",
+        "buildPath": "Build a Path"
     },
     "ua": {
         "login": "Увійти",
         "logout": "Вийти",
         "register": "Зареєструватися",
-        "myAccount": "Мій Аккаунт"
+        "myAccount": "Мій Аккаунт",
+        "buildPath": "Побудувати Шлях"
     }
 }
 </i18n>
@@ -112,7 +115,7 @@
         padding: 10px;
         background-color: white;
         margin: 0 auto;
-        min-height: 500px;
+        min-height: 800px;
     }
 
     #app {

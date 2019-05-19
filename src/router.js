@@ -7,6 +7,7 @@ import UserDetail from './views/UserDetail.vue'
 import Home from './views/Home.vue'
 import store from './store.js'
 import NotFound404 from "./views/NotFound404";
+import BuildPath from "./views/BuildPath";
 
 Vue.use(Router);
 
@@ -65,6 +66,11 @@ const router = new Router({
       path: '/users/:id',
       name: 'userDetail',
       component: UserDetail
+    },
+    {
+      path: '/build-path',
+      name: 'buildPath',
+      component: BuildPath
     },
     {
       path: '*',
