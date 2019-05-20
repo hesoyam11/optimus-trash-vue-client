@@ -3,7 +3,7 @@
         <div class="two-cols">
             <div class="bins-container">
                 <h2>Your Bins</h2>
-                <div>
+                <div class="bins-panel">
                     <p>Bins Amount: {{ bins.count }}</p>
                     <p>Page Number: {{ pageNumber }}</p>
                     <button v-if="bins['previous']" @click="previousPage">Previous Page</button>
@@ -25,10 +25,13 @@
             </div>
             <div class="bins-container">
                 <h2>Selected Bins</h2>
-                <p>Bins Amount: {{ selectedBins.length }}</p>
-                <button @click="selectAutomatically">Select Automatically</button>
-                <br>
-                <button @click="clearAllSelected">Clear All</button>
+                <div class="bins-panel">
+                    <p>Bins Amount: {{ selectedBins.length }}</p>
+                    <p>Total Weight: {{ totalWeight.toFixed(3) }}</p>
+                    <button @click="selectAutomatically">Select Automatically</button>
+                    <br>
+                    <button @click="clearAllSelected">Clear All</button>
+                </div>
                 <div class="bins-list">
                     <div class="bin-item" v-for="bin in selectedBins" :key="bin.id">
                         <p>ID: {{ bin.id }}</p>
@@ -43,6 +46,9 @@
                 </div>
             </div>
         </div>
+
+        <h2>Path</h2>
+        <button>Build a Path</button>
     </div>
 </template>
 
@@ -55,6 +61,15 @@
                 pageNumber: 1,
                 errorMessage: '',
                 selectedBins: []
+            }
+        },
+        computed: {
+            totalWeight() {
+                let res = 0;
+                for (let i in this.selectedBins) {
+                    res += this.selectedBins[i]['currentWeight'];
+                }
+                return res;
             }
         },
         mounted() {
@@ -130,6 +145,10 @@
     .bins-container {
         flex: 1;
         padding: 5px;
+    }
+
+    .bins-panel {
+        height: 120px;
     }
 
     .bins-list {
