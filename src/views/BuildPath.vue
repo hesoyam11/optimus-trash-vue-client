@@ -49,10 +49,13 @@
 
         <h2>Path</h2>
         <button>Build a Path</button>
+        <div id="map"></div>
     </div>
 </template>
 
 <script>
+    import gmapsInit from '../utils/gmaps';
+
     export default {
         name: "BuildPath",
         data() {
@@ -60,7 +63,9 @@
                 bins: {},
                 pageNumber: 1,
                 errorMessage: '',
-                selectedBins: []
+                selectedBins: [],
+                map: {},
+                google: {}
             }
         },
         computed: {
@@ -72,7 +77,7 @@
                 return res;
             }
         },
-        mounted() {
+        async mounted() {
             this.$axios({
                 url: 'api/bins/',
                 params: {
@@ -85,6 +90,17 @@
                     this.bins = response.data;
                 })
                 .catch(err => this.errorMessage = err.message);
+
+            try {
+                this.google = await gmapsInit();
+                this.map = new this.google.maps.Map(document.getElementById('map'), {
+                    center: {lat: 49.98647954965086, lng: 36.350662468482795},
+                    zoom: 17
+                });
+            }
+            catch(error) {
+                console.error(error);
+            }
         },
         methods: {
             previousPage() {
@@ -115,9 +131,18 @@
                         return; // if it is already selected
                     }
                 }
+                bin.marker = new this.google.maps.Marker({
+                    position: {
+                        lng: bin.longitude,
+                        lat: bin.latitude
+                    },
+                    label: bin.id.toString(),
+                    map: this.map
+                });
                 this.selectedBins.push(bin);
             },
             removeBin(bin) {
+                bin.marker.setMap(null);
                 this.selectedBins = this.selectedBins.filter(b => b !== bin);
             },
             selectAutomatically() {
@@ -126,6 +151,9 @@
                 }
             },
             clearAllSelected() {
+                for (let i in this.selectedBins) {
+                    this.selectedBins[i].marker.setMap(null);
+                }
                 this.selectedBins = [];
             }
         }
@@ -135,6 +163,13 @@
 <style scoped>
     p {
         margin: 5px;
+    }
+
+    #map {
+        background-color: darkgrey;
+        width: 100%;
+        height: 800px;
+        border: black 1px solid;
     }
 
     .two-cols {
