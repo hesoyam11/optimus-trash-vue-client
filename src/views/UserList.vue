@@ -1,21 +1,21 @@
 <template>
     <div>
-        <h1>Users</h1>
+        <h1>{{ $t('users') }}</h1>
         <div class="control-panel">
-            <p>Users Count: {{ users.count }}</p>
-            <button v-if="users.next" @click="nextPage">Next Page</button>
-            <button v-if="users.previous" @click="previousPage">Previous Page</button>
+            <p>{{ $t('usersCount') }}: {{ users.count }}</p>
+            <button v-if="users.next" @click="nextPage">{{ $t('nextPage') }}</button>
+            <button v-if="users.previous" @click="previousPage">{{ $t('previousPage') }}</button>
             <p v-if="errorMessage">{{ errorMessage }}</p>
         </div>
         <div>
             <div v-for="user in users.results" :key="user.username" class="user-card">
-                <p>Username: {{ user.username }}</p>
-                <p>Email: {{ user.email }}</p>
-                <p>First Name: {{ user['firstName'] }}</p>
-                <p>Last Name: {{ user['lastName'] }}</p>
-                <p>Is Confirmed: {{ user['isConfirmed'] }}</p>
+                <p>{{ $t('username') }}: {{ user.username }}</p>
+                <p>{{ $t('email') }}: {{ user.email }}</p>
+                <p>{{ $t('firstName') }}: {{ user['firstName'] }}</p>
+                <p>{{ $t('lastName') }}: {{ user['lastName'] }}</p>
+                <p>{{ $t('isConfirmed') }}: {{ user['isConfirmed'] }}</p>
                 <button @click="toggleConfirmation(user)">
-                    {{ user.isConfirmed ? "Reset Confirmation" : "Confirm" }}
+                    {{ user.isConfirmed ? $t('resetConfirmation') : $t('confirm') }}
                 </button>
             </div>
         </div>
@@ -88,6 +88,37 @@
         }
     }
 </script>
+
+<i18n>
+{
+    "en": {
+        "users": "Users",
+        "usersCount": "Users Count",
+        "nextPage": "Next Page",
+        "previousPage": "Previous Page",
+        "isConfirmed": "Is Confirmed",
+        "confirm": "Confirm",
+        "resetConfirmation": "Reset Confirmation",
+        "username": "Username",
+        "email": "Email",
+        "firstName": "First Name",
+        "lastName": "Last Name"
+    },
+    "uk": {
+        "users": "Користувачі",
+        "usersCount": "Загальна кількість",
+        "nextPage": "Наступна сторінка",
+        "previousPage": "Попередня сторінка",
+        "isConfirmed": "Підтвердження",
+        "confirm": "Підтвердити",
+        "resetConfirmation": "Скасувати підтвердження",
+        "username": "Юзернейм",
+        "email": "Електрона пошта",
+        "firstName": "Імʼя",
+        "lastName": "Прізвище"
+    }
+}
+</i18n>
 
 <style scoped>
     p {

@@ -1,11 +1,11 @@
 <template>
     <div>
-        <h1>User Account</h1>
+        <h1>{{ $t('userAccount') }}</h1>
         <p v-if="errorMessage">{{ errorMessage }}</p>
-        <p>Username: {{ user["username"] }}</p>
-        <p>Email: {{ user["email"] }}</p>
-        <p>First Name: {{ user["firstName"] }}</p>
-        <p>Last Name: {{ user["lastName"] }}</p>
+        <p>{{ $t('username') }}: {{ user["username"] }}</p>
+        <p>{{ $t('email') }}: {{ user["email"] }}</p>
+        <p>{{ $t('firstName') }}: {{ user["firstName"] }}</p>
+        <p>{{ $t('lastName') }}: {{ user["lastName"] }}</p>
     </div>
 </template>
 
@@ -29,6 +29,21 @@
     }
 </script>
 
-<style scoped>
-
-</style>
+<i18n>
+{
+    "en": {
+        "userAccount": "User Account",
+        "username": "Username",
+        "email": "Email",
+        "firstName": "First Name",
+        "lastName": "Last Name"
+    },
+    "uk": {
+        "userAccount": "Аккаунт Користувача",
+        "username": "Юзернейм",
+        "email": "Електрона пошта",
+        "firstName": "Імʼя",
+        "lastName": "Прізвище"
+    }
+}
+</i18n>

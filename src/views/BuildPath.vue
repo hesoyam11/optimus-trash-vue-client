@@ -2,53 +2,51 @@
     <div>
         <div class="two-cols">
             <div class="bins-container">
-                <h2>Your Bins</h2>
+                <h2>{{ $t('yourBins') }}</h2>
                 <div class="bins-panel">
-                    <p>Bins Amount: {{ bins.count }}</p>
-                    <p>Page Number: {{ pageNumber }}</p>
-                    <button v-if="bins['previous']" @click="previousPage">Previous Page</button>
-                    <button v-if="bins['next']" @click="nextPage">Next Page</button>
+                    <p>{{ $t('binsAmount') }}: {{ bins.count }}</p>
+                    <p>{{ $t('pageNumber') }}: {{ pageNumber }}</p>
+                    <button v-if="bins['previous']" @click="previousPage">{{ $t('previousPage') }}</button>
+                    <button v-if="bins['next']" @click="nextPage">{{ $t('nextPage') }}</button>
                     <p v-if="errorMessage">{{ errorMessage }}</p>
                 </div>
                 <div class="bins-list">
                     <div class="bin-item" v-for="bin in bins['results']" :key="bin.id">
                         <p>ID: {{ bin.id }}</p>
-                        <p>Owner: {{ bin.owner }}</p>
-                        <p>Longitude: {{ bin.longitude }}</p>
-                        <p>Latitude: {{ bin.latitude }}</p>
-                        <p>Maximum weight: {{ bin['maxWeight'].toFixed(3) }}</p>
-                        <p>Current weight: {{ bin['currentWeight'].toFixed(3) }}</p>
-                        <p>Fullness coefficient: {{ bin['fullness'].toFixed(2) }}</p>
-                        <button @click="selectBin(bin)">Select Bin</button>
+                        <p>{{ $t('longitude') }}: {{ bin.longitude }}</p>
+                        <p>{{ $t('latitude') }}: {{ bin.latitude }}</p>
+                        <p>{{ $t('maxWeight') }}: {{ bin['maxWeight'].toFixed(3) }}</p>
+                        <p>{{ $t('currentWeight') }}: {{ bin['currentWeight'].toFixed(3) }}</p>
+                        <p>{{ $t('fullnessCoefficient') }}: {{ bin['fullness'].toFixed(2) }}</p>
+                        <button @click="selectBin(bin)">{{ $t('selectBin') }}</button>
                     </div>
                 </div>
             </div>
             <div class="bins-container">
-                <h2>Selected Bins</h2>
+                <h2>{{ $t('selectedBins') }}</h2>
                 <div class="bins-panel">
-                    <p>Bins Amount: {{ selectedBins.length }}</p>
-                    <p>Total Weight: {{ totalWeight.toFixed(3) }}</p>
-                    <button @click="selectAutomatically">Select Automatically</button>
+                    <p>{{ $t('binsAmount') }}: {{ selectedBins.length }}</p>
+                    <p>{{ $t('totalWeight') }}: {{ totalWeight.toFixed(3) }}</p>
+                    <button @click="selectAutomatically">{{ $t('selectAutomatically') }}</button>
                     <br>
-                    <button @click="clearAllSelected">Clear All</button>
+                    <button @click="clearAllSelected">{{ $t('clearAll') }}</button>
                 </div>
                 <div class="bins-list">
                     <div class="bin-item" v-for="bin in selectedBins" :key="bin.id">
                         <p>ID: {{ bin.id }}</p>
-                        <p>Owner: {{ bin.owner }}</p>
-                        <p>Longitude: {{ bin.longitude }}</p>
-                        <p>Latitude: {{ bin.latitude }}</p>
-                        <p>Maximum weight: {{ bin['maxWeight'].toFixed(3) }}</p>
-                        <p>Current weight: {{ bin['currentWeight'].toFixed(3) }}</p>
-                        <p>Fullness coefficient: {{ bin['fullness'].toFixed(2) }}</p>
-                        <button @click="removeBin(bin)">Remove Bin</button>
+                        <p>{{ $t('longitude') }}: {{ bin.longitude }}</p>
+                        <p>{{ $t('latitude') }}: {{ bin.latitude }}</p>
+                        <p>{{ $t('maxWeight') }}: {{ bin['maxWeight'].toFixed(3) }}</p>
+                        <p>{{ $t('currentWeight') }}: {{ bin['currentWeight'].toFixed(3) }}</p>
+                        <p>{{ $t('fullnessCoefficient') }}: {{ bin['fullness'].toFixed(2) }}</p>
+                        <button @click="removeBin(bin)">{{ $t('removeBin') }}</button>
                     </div>
                 </div>
             </div>
         </div>
 
-        <h2>Path</h2>
-        <button @click="buildPath">Build a Path</button>
+        <h2>{{ $t('path') }}</h2>
+        <button @click="buildPath">{{ $t('buildPath') }}</button>
         <div id="map"></div>
         <div id="directionsPanel"></div>
     </div>
@@ -217,6 +215,53 @@
         }
     }
 </script>
+
+<i18n>
+{
+    "en": {
+        "yourBins": "Your Bins",
+        "selectedBins": "Selected Bins",
+        "binsAmount": "Bins Amount",
+        "totalWeight": "Total Weight",
+        "pageNumber": "Page Number",
+        "nextPage": "Next Page",
+        "previousPage": "Previous Page",
+        "selectAutomatically": "Select Automatically",
+        "clearAll": "Clear All",
+        "id": "ID",
+        "longitude": "Longitude",
+        "latitude": "Latitude",
+        "maxWeight": "Maximum weight",
+        "currentWeight": "Current weight",
+        "fullnessCoefficient": "Fullness coefficient",
+        "selectBin": "Select Bin",
+        "removeBin": "Remove Bin",
+        "path": "Path",
+        "buildPath": "Build a Path"
+    },
+    "uk": {
+        "yourBins": "Ваші Контейнери",
+        "selectedBins": "Вибрані Контейнери",
+        "binsAmount": "Кількість контейнерів",
+        "totalWeight": "Загальна вага сміття",
+        "pageNumber": "Номер сторінки",
+        "nextPage": "Наступна сторінка",
+        "previousPage": "Попередня сторінка",
+        "selectAutomatically": "Вибрати автоматично",
+        "clearAll": "Видалити всі",
+        "id": "ID",
+        "longitude": "Довгота",
+        "latitude": "Широта",
+        "maxWeight": "Максимальна вага",
+        "currentWeight": "Поточна вага",
+        "fullnessCoefficient": "Коефіціент заповненості",
+        "selectBin": "Вибрати",
+        "removeBin": "Видалити",
+        "path": "Шлях",
+        "buildPath": "Побудувати шлях"
+    }
+}
+</i18n>
 
 <style scoped>
     p {
