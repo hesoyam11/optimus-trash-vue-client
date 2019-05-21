@@ -48,7 +48,7 @@
         </div>
 
         <h2>Path</h2>
-        <button>Build a Path</button>
+        <button @click="buildPath">Build a Path</button>
         <div id="map"></div>
     </div>
 </template>
@@ -66,7 +66,10 @@
                 selectedBins: [],
                 google: {},
                 map: {},
-                bounds: {}
+                bounds: {},
+                directionsService: {},
+                directionsRenderer: {},
+                origin: null
             }
         },
         computed: {
@@ -95,7 +98,22 @@
             try {
                 this.google = await gmapsInit();
                 this.map = new this.google.maps.Map(document.getElementById('map'));
+                let self = this;
+                this.google.maps.event.addListener(this.map, 'click', function(event) {
+                    if (self.origin) {
+                        self.origin.setMap(null);
+                    }
+                    self.origin = new self.google.maps.Marker({
+                        position: event.latLng,
+                        label: 'X',
+                        map: self.map
+                    });
+                });
                 this.bounds = new this.google.maps.LatLngBounds();
+                this.directionsService = new this.google.maps.DirectionsService;
+                this.directionsRenderer = new this.google.maps.DirectionsRenderer;
+                this.directionsRenderer.setMap(this.map);
+                console.log(this.directionsService, this.directionsRenderer);
             }
             catch(error) {
                 console.error(error);
@@ -156,6 +174,44 @@
                     this.selectedBins[i].marker.setMap(null);
                 }
                 this.selectedBins = [];
+            },
+            buildPath() {
+                if (!this.origin) {
+                    alert('You have to specify the origin of a path by clicking on the map.');
+                    return;
+                }
+                if (this.selectedBins.length < 1) {
+                    alert('You have to select at least 1 bin!');
+                    return;
+                }
+                let directionsRenderer = this.directionsRenderer;
+                let waypoints = [];
+                for (let i in this.selectedBins) {
+                    waypoints.push(
+                        {
+                            location: this.selectedBins[i].marker.position,
+                            stopover: false
+                        }
+                    );
+                }
+                this.directionsService.route(
+                    {
+                        origin: this.origin.position,
+                        destination: this.origin.position,
+                        waypoints,
+                        optimizeWaypoints: true,
+                        unitSystem: this.google.maps.UnitSystem.METRIC,
+                        travelMode: 'DRIVING'
+                    },
+                    function(response, status) {
+                        if (status === 'OK') {
+                            directionsRenderer.setDirections(response);
+                        }
+                        else {
+                            alert('Directions request failed due to ' + status);
+                        }
+                    }
+                );
             }
         }
     }
