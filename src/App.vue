@@ -5,14 +5,25 @@
 
             <router-link :to="{ name: 'home' }">Optimus Trash</router-link>
 
+            <span v-if="isLoggedIn && !isConfirmed">
+                {{ $t('notConfirmedMessage') }}
+            </span>
+
             <div class="float-right">
                 <span v-if="!isLoggedIn">
                     <router-link :to="{ name: 'login' }">{{ $t('login') }}</router-link>
                     <router-link :to="{ name: 'register' }">{{ $t('register') }}</router-link>
                 </span>
 
-                <span v-if="isLoggedIn">
+                <span v-if="isLoggedIn && isConfirmed">
                     <router-link :to="{ name: 'buildPath' }">{{ $t('buildPath') }}</router-link>
+                </span>
+
+                <span v-if="isLoggedIn && isSuperuser">
+                    <router-link :to="{ name: 'userList' }">{{ $t('administration') }}</router-link>
+                </span>
+
+                <span v-if="isLoggedIn">
                     <router-link :to="userPageRoute">{{ $t('myAccount') }}</router-link>
                     <a @click="logout">{{ $t('logout') }}</a>
                 </span>
@@ -38,6 +49,12 @@
         computed: {
             isLoggedIn() {
                 return this.$store.getters.isLoggedIn;
+            },
+            isConfirmed() {
+                return this.$store.state.isConfirmed;
+            },
+            isSuperuser() {
+                return this.$store.state.isSuperuser;
             },
             userPageRoute() {
                 return {
@@ -84,14 +101,18 @@
         "logout": "Logout",
         "register": "Register",
         "myAccount": "My Account",
-        "buildPath": "Build a Path"
+        "buildPath": "Build a Path",
+        "notConfirmedMessage": "Your account is not confirmed",
+        "administration": "Administration"
     },
     "uk": {
         "login": "Увійти",
         "logout": "Вийти",
         "register": "Зареєструватися",
         "myAccount": "Мій Аккаунт",
-        "buildPath": "Побудувати Шлях"
+        "buildPath": "Побудувати Шлях",
+        "notConfirmedMessage": "Ваш аккаунт не є підтвердженим",
+        "administration": "Адміністрування"
     }
 }
 </i18n>
@@ -125,14 +146,15 @@
     }
 
     #nav {
+        color: white;
         margin: 0;
         background-color: #333;
     }
 
     #nav a {
+        color: white;
         font-weight: bold;
         text-decoration: none;
-        color: white;
         display: inline-block;
         padding: 14px 16px;
     }
