@@ -1,7 +1,7 @@
 <template>
-  <div>
-    <h1>Page Not Found 404</h1>
-  </div>
+    <div>
+        <h1>{{ $t('pageNotFound') }}</h1>
+    </div>
 </template>
 
 <script>
@@ -10,6 +10,13 @@
     }
 </script>
 
-<style scoped>
-
-</style>
+<i18n>
+{
+    "en": {
+        "pageNotFound": "Page Not Found 404"
+    },
+    "uk": {
+        "pageNotFound": "Сторінка Не Знайдена 404"
+    }
+}
+</i18n>
