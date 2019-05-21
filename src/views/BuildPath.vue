@@ -64,8 +64,9 @@
                 pageNumber: 1,
                 errorMessage: '',
                 selectedBins: [],
+                google: {},
                 map: {},
-                google: {}
+                bounds: {}
             }
         },
         computed: {
@@ -93,10 +94,8 @@
 
             try {
                 this.google = await gmapsInit();
-                this.map = new this.google.maps.Map(document.getElementById('map'), {
-                    center: {lat: 49.98647954965086, lng: 36.350662468482795},
-                    zoom: 17
-                });
+                this.map = new this.google.maps.Map(document.getElementById('map'));
+                this.bounds = new this.google.maps.LatLngBounds();
             }
             catch(error) {
                 console.error(error);
@@ -140,6 +139,8 @@
                     map: this.map
                 });
                 this.selectedBins.push(bin);
+                this.bounds.extend(bin.marker.position);
+                this.map.fitBounds(this.bounds);
             },
             removeBin(bin) {
                 bin.marker.setMap(null);
