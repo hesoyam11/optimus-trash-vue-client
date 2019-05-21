@@ -42,7 +42,7 @@
     "yourPassword": "Your Password",
     "login": "Login"
   },
-  "ua": {
+  "uk": {
     "loggingIn": "Вхід у систему",
     "yourUsername": "Ваш Юзернейм",
     "yourPassword": "Ваш Пароль",

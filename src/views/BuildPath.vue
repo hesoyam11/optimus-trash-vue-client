@@ -50,6 +50,7 @@
         <h2>Path</h2>
         <button @click="buildPath">Build a Path</button>
         <div id="map"></div>
+        <div id="directionsPanel"></div>
     </div>
 </template>
 
@@ -113,7 +114,7 @@
                 this.directionsService = new this.google.maps.DirectionsService;
                 this.directionsRenderer = new this.google.maps.DirectionsRenderer;
                 this.directionsRenderer.setMap(this.map);
-                console.log(this.directionsService, this.directionsRenderer);
+                this.directionsRenderer.setPanel(document.getElementById('directionsPanel'));
             }
             catch(error) {
                 console.error(error);

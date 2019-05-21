@@ -1,3 +1,5 @@
+import store from '../store';
+
 const API_KEY = process.env.VUE_APP_GOOGLE_MAPS_API_KEY;
 const CALLBACK_NAME = 'gmapsCallback';
 
@@ -29,7 +31,8 @@ export default function init() {
     const script = document.createElement('script');
     script.async = true;
     script.defer = true;
-    script.src = `https://maps.googleapis.com/maps/api/js?key=${API_KEY}&callback=${CALLBACK_NAME}`;
+    console.log(store.state.locale);
+    script.src = `https://maps.googleapis.com/maps/api/js?key=${API_KEY}&callback=${CALLBACK_NAME}&language=${store.state.locale}`;
     script.onerror = rejectInitPromise;
     document.querySelector('head').appendChild(script);
 

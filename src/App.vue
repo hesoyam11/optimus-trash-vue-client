@@ -52,7 +52,7 @@
                 return this.$store.state.locale;
             },
             availableLocale() {
-                return this.currentLocale === 'en' ? 'ua' : 'en';
+                return this.currentLocale === 'en' ? 'uk' : 'en';
             }
         },
 
@@ -87,7 +87,7 @@
         "myAccount": "My Account",
         "buildPath": "Build a Path"
     },
-    "ua": {
+    "uk": {
         "login": "Увійти",
         "logout": "Вийти",
         "register": "Зареєструватися",
