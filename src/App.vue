@@ -17,6 +17,7 @@
 
                 <span v-if="isLoggedIn && isConfirmed">
                     <router-link :to="{ name: 'buildPath' }">{{ $t('buildPath') }}</router-link>
+                    <router-link :to="{ name: 'binList' }">{{ $t('bins') }}</router-link>
                 </span>
 
                 <span v-if="isLoggedIn && isSuperuser">
@@ -101,6 +102,7 @@
         "logout": "Logout",
         "register": "Register",
         "myAccount": "My Account",
+        "bins": "Bins",
         "buildPath": "Build a Path",
         "notConfirmedMessage": "Your account is not confirmed",
         "administration": "Administration"
@@ -110,6 +112,7 @@
         "logout": "Вийти",
         "register": "Зареєструватися",
         "myAccount": "Мій Аккаунт",
+        "bins": "Контейнери",
         "buildPath": "Побудувати Шлях",
         "notConfirmedMessage": "Ваш аккаунт не є підтвердженим",
         "administration": "Адміністрування"

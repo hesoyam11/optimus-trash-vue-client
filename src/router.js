@@ -8,6 +8,7 @@ import store from './store.js'
 import NotFound404 from "./views/NotFound404";
 import BuildPath from "./views/BuildPath";
 import UserList from "./views/UserList";
+import BinList from "./views/BinList";
 
 Vue.use(Router);
 
@@ -47,6 +48,15 @@ const router = new Router({
                 requiresIsLoggedIn: true,
                 requiresIsConfirmed: true,
                 requiresIsSuperuser: true
+            }
+        },
+        {
+            path: '/bins',
+            name: 'binList',
+            component: BinList,
+            meta: {
+                requiresIsLoggedIn: true,
+                requiresIsConfirmed: true
             }
         },
         {
